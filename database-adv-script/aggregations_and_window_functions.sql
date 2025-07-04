@@ -12,7 +12,8 @@ GROUP BY user_id, first_name
 SELECT 
   property_id,
   total_bookings,
-  RANK() OVER (ORDER BY total_bookings DESC) AS rank
+  RANK() OVER (ORDER BY total_bookings DESC) AS rank,
+  ROW_NUMBER() OVER (PARTITION BY property_id) AS row_number
 FROM (
   SELECT property_id, COUNT(*) AS total_bookings
   FROM booking
