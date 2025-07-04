@@ -20,3 +20,13 @@ CREATE INDEX idx_review_rating ON review(rating);
 -- Indexes for the `message` table
 -- Support inbox functionality (messages by recipient and time)
 CREATE INDEX idx_message_inbox ON message(recipient_id, sent_at);
+
+
+-- Example query to test:
+EXPLAIN ANALYZE SELECT * FROM property WHERE location = 'Paris' AND pricepernight < 150;
+
+-- Or
+EXPLAIN ANALYZE SELECT * FROM booking WHERE property_id = 5 AND start_date >= '2024-08-01' AND end_date <= '2024-08-10';
+
+-- Or
+EXPLAIN ANALYZE SELECT * FROM users WHERE role = 'admin';
