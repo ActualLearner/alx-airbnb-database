@@ -1,7 +1,7 @@
 /* Retrieve all bookings and the respective users who made those bookings. */
 SELECT * 
 FROM booking b
-JOIN users u
+INNER JOIN users u
 ON b.user_id = u.user_id
 
 /* Retrieve all properties and their reviews, including properties that have no reviews. */
