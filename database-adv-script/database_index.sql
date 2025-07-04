@@ -1,49 +1,22 @@
-###  Sample Queries
+-- Indexes for the `users` table
+-- Improve filtering and permission checks by user role
+CREATE INDEX idx_users_role ON users(role);
 
-#### 1. Property Search
+-- Indexes for the `property` table
+-- Improve searches by price and location
+CREATE INDEX idx_property_price ON property(pricepernight);
+CREATE INDEX idx_property_location ON property(location);
 
-```sql
-EXPLAIN SELECT * FROM property WHERE location = 'Paris' AND pricepernight < 150;
-```
+-- Indexes for the `booking` table
+-- Improve availability filtering and status lookups
+CREATE INDEX idx_booking_status ON booking(status);
+-- Composite index for efficient availability search
+CREATE INDEX idx_booking_availability ON booking(property_id, start_date, end_date);
 
-* **Before index:** Full table scan
-* **After index:** Index scan using `idx_property_location` and `idx_property_price`
-* **Result:** \~3x faster execution time
+-- Indexes for the `review` table
+-- Improve filtering by rating
+CREATE INDEX idx_review_rating ON review(rating);
 
----
-
-#### 2. Booking Availability
-
-```sql
-EXPLAIN SELECT * FROM booking 
-WHERE property_id = 12 AND start_date >= '2025-07-10' AND end_date <= '2025-07-20';
-```
-
-* **Before index:** Full scan or inefficient filtering
-* **After index:** Index range scan using `idx_booking_availability`
-* **Result:** Huge reduction in read cost
-
----
-
-#### 3. Inbox Lookup
-
-```sql
-EXPLAIN SELECT * FROM message 
-WHERE recipient_id = 42 ORDER BY sent_at DESC;
-```
-
-* **Before index:** Sorting and filtering on full table
-* **After index:** Index scan using `idx_message_inbox`
-* **Result:** Faster sorting and pagination
-
----
-
-### Summary
-
-Adding indexes to high-usage columns significantly improved query performance, especially for:
-
-* Date range lookups
-* Filtering on foreign keys
-* Ordered selections (e.g., inbox or recent reviews)
-
-Indexes were chosen based on their appearance in `WHERE`, `JOIN`, and `ORDER BY` clauses, following best practices for index design.
+-- Indexes for the `message` table
+-- Support inbox functionality (messages by recipient and time)
+CREATE INDEX idx_message_inbox ON message(recipient_id, sent_at);
