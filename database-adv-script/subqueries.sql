@@ -1,13 +1,14 @@
 
 /* Find all properties where the average rating is greater than 4.0 */
 
-SELECT property_id, name, description, AVG(r.rating)
+SELECT property_id, name, description
 FROM property p
-JOIN review r
-ON p.property_id = r.property_id
-GROUP BY property_id, name, description
-HAVING AVG(r.rating) > 4.0
-
+WHERE property_id IN (
+  SELECT r.property_id
+  FROM reviews r
+  GROUP BY r.property_id
+  HAVING AVG(r.rating) > 4.0
+  )
 /* Find users who have made more than 3 bookings */
 
 SELECT user_id, first_name, COUNT(b.booking_id) AS bookings
