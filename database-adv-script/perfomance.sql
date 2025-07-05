@@ -5,6 +5,8 @@ FROM payment p
 JOIN booking b ON p.booking_id = b.booking_id
 JOIN property pr ON b.property_id = pr.property_id
 JOIN users u ON u.user_id = b.user_id
+WHERE p.payment_id IS NOT NULL
+AND b.status IS NOT NULL;
 
 -- identify any inefficiencies.
 
